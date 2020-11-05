@@ -2,7 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: argocd-server
-  namespace: default
+  namespace: argocd
 spec:
   entryPoints:
     - websecure
@@ -12,13 +12,13 @@ spec:
       priority: 10
       services:
         - name: argocd-server
-          port: http
+          port: 80
     - kind: Rule
       match: Host(`operator.localhost`) && Headers(`Content-Type`, `application/grpc`)
       priority: 11
       services:
         - name: argocd-server
-          port: http
+          port: 80
           scheme: h2c
   tls:
     certResolver: default

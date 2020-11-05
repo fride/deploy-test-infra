@@ -75,7 +75,7 @@ unpause_kind_cluster() {         # pauses the kind cluster
 load_image() {                   # load docker image into cluster from local repo (if you don't have internet)
   local image_name=$1
   : ${image_name:?}
-  (set -x; ${TMP_DIR}/kind load docker-image --name ${CLUSTER_NAME} --nodes ${CLUSTER_NAME}-control-plane "${image_name}")
+  (set -x; kind load docker-image --name ${CLUSTER_NAME} --nodes ${CLUSTER_NAME}-control-plane "${image_name}")
 }
 
 if [ -z "$1" ] || ! echo $(_functions)|grep $1 >/dev/null
