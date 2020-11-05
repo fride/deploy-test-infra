@@ -10,19 +10,36 @@ To install a local kubernetis test cluster use you will need to install kind, ku
     brew install kind
     brew install kubernetes-cli
 
+## Settings.
+
+every service runs in its own subdomain. To use them on a `localhost` please change your `/etc/hosts`.
+
+    127.0.0.1 operator.localhost
+    127.0.0.1 spielwiese.localhost
+
 ## The local test cluster
 
 Use the script `./scripts/cluster.sh` to start the local kind cluster.
 
 ## Deploying the services
 
-1) install traefik: 
-   `kubectl apply -f traefik/01-custom-resource-definitions.yaml`
-   `kubectl apply -f traefik`
-   *(the custom-resource-definitions have to be deployed first as they are needed by the ingress controller traefik)*
-2) install argocd:   
-   `kubectl apply -f argocd/`
-3) start port forwarding. `kubectl port-forward --address 0.0.0.0 service/traefik 8000:8000 8080:8080 4443:4443 -n default`
-4) open https://operator.localhost:4443 to login into argocd. (the traefik ui can be reached via http://localhost:8080/dashboard/#/)
+     ./scripts/cluster.sh launch_kind_cluster
+     ./traefik/deploy.sh 
+     ./argocd/deploy.sh 
+
+It will take some time until the services are all up.
+
+Then type
+
+    kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+
+to get the password for argocd and
+
+    kubectl port-forward --address 0.0.0.0 service/traefik 8000:8000 8080:8080 4443:4443 -n default
+
+to forward the ports to your local dev machine.    
+
+  
 
 
+ 
