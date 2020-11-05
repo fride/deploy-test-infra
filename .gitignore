@@ -1,1 +1,3 @@
 .local-settings
+.local-test-cluster-files
+kind.kubeconfig
