@@ -40,6 +40,29 @@ to get the password for argocd and
 to forward the ports to your local dev machine.    
 
   
+## Secrets
+
+If you need to deploy docker images from a private registry you need to give the cluster the login credentials. A script to generate one for the github registry (ghcr.io) and the github packages (docker.pkg.github.com) can be found under `/./scripts/github-cr-secrets.sh/`. Use it with 
+
+* `./scripts/github-cr-secrets.sh create_secret` to create it
+* `./scripts/github-cr-secrets.sh deploy_secret` to deploy it to the current cluster.
+
+The deployments can reference the secret via its name `dockerconfigjson-github-com`. Here is an example.
+
+    ---
+    apiVersion: apps/v1
+    kind: Deployment
+    ...
+    template:
+       ...
+        spec:
+        containers:
+        - name: some name
+            image: some imahe
+            ...
+        imagePullSecrets:
+            - name: dockerconfigjson-github-com
+
 
 
  
